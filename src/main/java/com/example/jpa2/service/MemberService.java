@@ -6,6 +6,7 @@ import com.example.jpa2.entity.Member;
 import com.example.jpa2.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
+    @Transactional
     public MemberResponseDto saveMember(MemberRequestDto memberRequestDto) {
 
         Member member = new Member(memberRequestDto.getUsername(), memberRequestDto.getPassword(), memberRequestDto.getEmail());
@@ -25,6 +27,7 @@ public class MemberService {
         return new MemberResponseDto(member.getId(), member.getUsername(), member.getEmail());
     }
 
+    @Transactional(readOnly = true)
     public List<MemberResponseDto> findAll() {
 
         List<Member> members = memberRepository.findAll();
@@ -37,6 +40,7 @@ public class MemberService {
         return dtos;
     }
 
+    @Transactional(readOnly = true)
     public MemberResponseDto findById(Long id) {
 
         Member member = memberRepository.findById(id).orElseThrow(
@@ -45,6 +49,7 @@ public class MemberService {
         return new MemberResponseDto(member.getId(), member.getUsername(), member.getEmail());
     }
 
+    @Transactional
     public MemberResponseDto updateMember(Long id, MemberRequestDto memberRequestDto) {
 
         Member member = memberRepository.findById(id).orElseThrow(
@@ -53,9 +58,10 @@ public class MemberService {
 
         member.update(member.getUsername(), member.getPassword(), member.getEmail());
 
-        return new MemberResponseDto(member.getId(), member.getPassword(), member.getEmail());
+        return new MemberResponseDto(member.getId(), member.getUsername(), member.getEmail());
     }
 
+    @Transactional
     public void deleteMember(Long id) {
 
         memberRepository.deleteById(id);
