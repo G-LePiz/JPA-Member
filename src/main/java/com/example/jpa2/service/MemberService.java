@@ -56,7 +56,7 @@ public class MemberService {
                 () -> new IllegalArgumentException("수정할 수 없습니다.")
         );
 
-        member.update(member.getUsername(), member.getPassword(), member.getEmail());
+        member.update(memberRequestDto.getUsername(), memberRequestDto.getPassword(), memberRequestDto.getEmail());
 
         return new MemberResponseDto(member.getId(), member.getUsername(), member.getEmail());
     }
